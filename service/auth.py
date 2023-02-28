@@ -23,12 +23,13 @@ class AuthService:
             raise abort(404)
 
         if not is_refresh:
-            if not self.user_service.compare_password(password, user.password):
+
+            if not self.user_service.compare_password(user['password'], password):
                 abort(401)
 
         data = {
-            "username": user.username,
-            "role": user.role,
+            "username": user['username'],
+            "role": user['role']
         }
 
         min30 = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
@@ -43,16 +44,17 @@ class AuthService:
 
     def approve_refresh_token(self, refresh_token):
         # используя метод с декодированием токена.Получаем информацию о пользователи
-        data = jwt.decode(jwt=refresh_token, algorithms=[JWT_ALGORITHM])
+        data = jwt.decode(jwt=refresh_token, key=JWT_SECRET, algorithms=[JWT_ALGORITHM])
         # проверяем есть ли токен. Нам прислали рефреш токен то мы доверяем пользователю и не требуем пароля
-        username = data.get["username"]
+        username = data.get("username")
         user = self.user_service.get_by_username(username=username)
         if user is None:
             raise abort(404)
 
-        return self.generate_tokens(username=username, password=user.password, is_refresh=True)
+        return self.generate_tokens(username=username, password=user['password'], is_refresh=True)
 
     def decode_token(self, token):
         # используя метод с декодированием токена.
-        data = jwt.decode(jwt=token, algorithms=[JWT_ALGORITHM])
+        token = token.split("Bearer ")[-1]
+        data = jwt.decode(jwt=token, key=JWT_SECRET, algorithms=[JWT_ALGORITHM])
         return data

@@ -2,6 +2,7 @@ import base64
 import hashlib
 import hmac
 
+from flask import abort
 
 from dao.model.user import UserSchema
 from helpers.constants import PWD_SALT, PWD_ITERATIONS
@@ -40,6 +41,8 @@ class UserService:
             return "Нет такого пользователя"
 
     def create(self, user_data):
+        if self.get_by_username(user_data.get('username')):
+            return abort(400, 'Пользователь с таким именем ужe cуществует в базе данных')
         # Метод добавления нового пользователя в базу данных
         try:
             user_data['password'] = self.generate_password(user_data['password'])
