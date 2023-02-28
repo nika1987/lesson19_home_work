@@ -35,11 +35,11 @@ class UserDao:
 
     def update(self, user_data):
         # обновление пользователя
-        uid = user_data.get['uid']
+        uid = user_data.get('uid')
 
-        user = self.get_one(uid)
+        user = self.get_one(uid)# экземпляр класса User
         user.username = user_data.get('username')
         user.password = user_data.get('password')
 
-        self.session.update(user)
+        self.session.add(user)
         self.session.commit()

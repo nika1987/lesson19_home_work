@@ -4,6 +4,7 @@ from setup_db import db
 
 
 class User(db.Model):
+    # создаем таблицу данных
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String)
@@ -12,6 +13,7 @@ class User(db.Model):
 
 
 class UserSchema(Schema):
+    # делаем серилизацию(из модели json)
     id = fields.Integer()
     username = fields.String()
     password = fields.String()

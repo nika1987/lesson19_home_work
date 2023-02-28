@@ -24,7 +24,7 @@ class UsersView(Resource):
 @user_ns.route('/<int:uid>')
 class UserView(Resource):
     def get(self, uid):
-        one_user = user_service.get(uid)
+        one_user = user_service.get_one(uid)
 
         return one_user, 200
 

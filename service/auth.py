@@ -12,11 +12,15 @@ from service.user import UserService
 
 class AuthService:
     def __init__(self, user_service: UserService):
-        # иницилизация класса, в качестве зависимости имеет UserService
+        """
+        иницилизация класса, в качестве зависимости имеет UserService
+        """
         self.user_service = user_service
 
     def generate_tokens(self, username, password, is_refresh=False):
-        # получив username и пароль мы можем найти нужного нам пользователя
+        """
+        получив username и пароль мы можем найти нужного нам пользователя и сгенерировать токен
+        """
         user = self.user_service.get_by_username(username)
 
         if user is None:
@@ -43,7 +47,9 @@ class AuthService:
         return {"access_token": access_token, "refresh_token": refresh_token}
 
     def approve_refresh_token(self, refresh_token):
-        # используя метод с декодированием токена.Получаем информацию о пользователи
+        """
+        используя метод с декодированием токена.Получаем информацию о пользователи
+        """
         data = jwt.decode(jwt=refresh_token, key=JWT_SECRET, algorithms=[JWT_ALGORITHM])
         # проверяем есть ли токен. Нам прислали рефреш токен то мы доверяем пользователю и не требуем пароля
         username = data.get("username")
@@ -54,7 +60,9 @@ class AuthService:
         return self.generate_tokens(username=username, password=user['password'], is_refresh=True)
 
     def decode_token(self, token):
-        # используя метод с декодированием токена.
-        token = token.split("Bearer ")[-1]
-        data = jwt.decode(jwt=token, key=JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        """
+        это метод служит для декодирования токена
+        """
+        token = token.split("Bearer ")[-1] #получаем чистый токен из токена
+        data = jwt.decode(jwt=token, key=JWT_SECRET, algorithms=[JWT_ALGORITHM]) # извлечение декодированного токена в словарь
         return data

@@ -39,4 +39,4 @@ app = create_app(Config())
 app.debug = True
 
 
-app.run()
+#app.run()
