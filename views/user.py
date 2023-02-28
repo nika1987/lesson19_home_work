@@ -1,7 +1,6 @@
 from flask import request
 from flask_restx import Namespace, Resource
 
-from dao.model.user import UserSchema
 from implemented import user_service
 
 user_ns = Namespace('user')
