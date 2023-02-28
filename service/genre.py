@@ -1,4 +1,5 @@
 from dao.genre import GenreDAO
+from dao.model.genre import GenreSchema
 
 
 class GenreService:
@@ -12,11 +13,11 @@ class GenreService:
         return self.dao.get_all()
 
     def create(self, genre_d):
-        return self.dao.create(genre_d)
+        created_genre = self.dao.create(genre_d)
+        return GenreSchema().dump(created_genre)
 
     def update(self, genre_d):
         self.dao.update(genre_d)
-        return self.dao
 
     def delete(self, rid):
         self.dao.delete(rid)

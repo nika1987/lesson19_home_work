@@ -92,3 +92,8 @@ Content-Type: application/json
 ###
 
 DELETE http://127.0.0.1:10001/movies/21
+
+###
+
+GET http://127.0.0.1:10001/users/
+Accept: application/json
